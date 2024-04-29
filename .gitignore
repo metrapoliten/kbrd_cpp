@@ -35,5 +35,7 @@
 .idea/
 
 # CMake folder
-
 cmake*/
+
+# PVS-Studio folder
+.PVS-Studio/
