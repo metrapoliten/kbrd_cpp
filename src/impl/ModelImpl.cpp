@@ -54,7 +54,7 @@ static inline void getSettings(hid_device* dev, unsigned char* buf)
 	checkReportError(res, dev);
 }
 
-hid_device* openDevice()
+static hid_device* openDevice()
 {
 	auto dev = hid_open(VENDOR_ID, PRODUCT_ID, nullptr);
 	if (!dev)
