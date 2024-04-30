@@ -16,8 +16,10 @@ public:
 
 	hid_device* getChipHandler() override;
 	int getBrightness() override;
+	Color getRGB() override;
 
 private:
 	hid_device* _dev; // todo: change to ref?
 	int _brightness;
+	Color _rgb;
 };

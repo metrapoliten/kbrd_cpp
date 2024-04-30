@@ -2,13 +2,14 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
 #include <cassert>
-#include <iostream>
-#include <stdexcept>
-#include <utility>
 #include <cstring>
 #include <iomanip>
+#include <iostream>
 #include <limits>
+#include <stdexcept>
+#include <utility>
 
+#include "Color.h"
 #include "impl/ViewImpl.h"
 
 namespace
@@ -26,8 +27,10 @@ ViewImpl::ViewImpl(std::shared_ptr<IController> controller, std::shared_ptr<IMod
 void ViewImpl::showCurrentSettings()
 {
 	int lvl = _model->getBrightness();
+	Color RGB = _model->getRGB();
 	std::cout << "CURRENT SETTINGS" << '\n'
-			  << "> Brightness: " << lvl << '%' << '\n';
+			  << "> Brightness: " << lvl << '%' << '\n'
+			  << "> RGB: " << RGB.R << ' ' << RGB.B << ' ' << RGB.G << '\n';
 }
 
 static inline void printOptions()
@@ -52,7 +55,7 @@ static inline void changeBrightness(const std::shared_ptr<IController>& c_ptr, i
 void ViewImpl::runMenu()
 {
 	printOptions();
-	char optionBuf[4] = {0};
+	char optionBuf[4] = { 0 };
 	while (optionBuf[0] != QUIT)
 	{
 		std::cout << "Enter command: ";
@@ -65,7 +68,7 @@ void ViewImpl::runMenu()
 			int lvl;
 			std::cout << "value [0, 100]: ";
 			std::cin >> lvl;
-//			memset(&optionBuf, 0, sizeof(optionBuf));
+			//			memset(&optionBuf, 0, sizeof(optionBuf));
 			if (0 <= lvl and lvl <= 100)
 			{
 				changeBrightness(_controller, lvl);
