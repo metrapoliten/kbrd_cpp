@@ -22,10 +22,9 @@ namespace ErrorMsg
 constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
 }
 
-static inline void terminate(hid_device* dev)
+static inline void logAndThrowRuntimeErr(hid_device* dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
-	(void)hid_exit();
 	throw std::runtime_error(ErrorMsg::ChipError);
 }
 
@@ -33,7 +32,7 @@ static inline void checkReportError(int res, hid_device* dev)
 {
 	if (res == -1)
 	{
-		terminate(dev);
+		logAndThrowRuntimeErr(dev);
 	}
 }
 
@@ -60,7 +59,7 @@ hid_device* openDevice()
 	auto dev = hid_open(VENDOR_ID, PRODUCT_ID, nullptr);
 	if (!dev)
 	{
-		terminate(nullptr);
+		logAndThrowRuntimeErr(nullptr);
 	}
 	return dev;
 }
@@ -92,8 +91,11 @@ int ModelImpl::getBrightness()
 	return ModelImpl::_brightness;
 }
 
-ModelImpl::~ModelImpl() // todo: throw exception in destructor?
+ModelImpl::~ModelImpl()
 {
 	hid_close(_dev);
-	hid_exit();
+	if (hid_exit() == -1)
+	{
+		std::wcerr << "hid_exit() returned error: the static data associated with HIDAPI weren't freed" << '\n'; // todo: make error/log file
+	}
 }
