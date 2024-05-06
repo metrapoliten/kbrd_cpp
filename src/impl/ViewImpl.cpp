@@ -17,13 +17,13 @@ namespace
 constexpr char CHANGE_BRIGHTNESS = 'b';
 constexpr char QUIT = 'q';
 
-inline void printOptions()
+void printOptions()
 {
 	std::cout << "OPTIONS\n"
 				 "> b     change brightness\n";
 }
 
-inline void changeBrightness(const std::shared_ptr<IController>& c_ptr, int lvl)
+void changeBrightness(const std::shared_ptr<IController>& c_ptr, int lvl)
 {
 	assert(0 <= lvl and lvl <= 100);
 	try

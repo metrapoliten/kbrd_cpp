@@ -24,26 +24,26 @@ constexpr unsigned char GET_MONOCOLOR_BYTE = static_cast<unsigned char>(148);
 
 constexpr unsigned REPORT_LENGTH = 9;
 
-inline void logAndThrowRuntimeErr(hid_device* dev)
+void logAndThrowRuntimeErr(hid_device* dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
 	throw std::runtime_error(ErrorMsg::ChipError);
 }
 
-inline void checkReportError(int res, hid_device* dev)
+void checkReportError(int res, hid_device* dev)
 {
 	if (res == -1)
 	{
 		logAndThrowRuntimeErr(dev);
 	}
 }
-inline void init()
+void init()
 {
 	const int res = hid_init();
 	checkReportError(res, nullptr);
 }
 
-inline void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
+void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 {
 	buf[0] = controlByte;
 	int res = hid_send_feature_report(dev, buf, REPORT_LENGTH);
@@ -55,7 +55,7 @@ inline void getReport(hid_device* dev, unsigned char controlByte, unsigned char*
 }
 
 //todo: ask -> collect
-inline int askBrightness(hid_device* dev)
+int askBrightness(hid_device* dev)
 {
 	assert(dev);
 
@@ -64,7 +64,7 @@ inline int askBrightness(hid_device* dev)
 	return buf[5];
 }
 
-inline void askRGB(hid_device* dev, Color &Color)
+void askRGB(hid_device* dev, Color &Color)
 {
 	assert(dev);
 

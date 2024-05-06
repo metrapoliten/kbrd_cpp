@@ -20,7 +20,7 @@ constexpr unsigned char ACTION_BYTE = static_cast<unsigned char>(0x02);
 
 constexpr unsigned REPORT_LENGTH = 9;
 
-inline void sendFeatureReport(hid_device* dev, unsigned char (&payload)[REPORT_LENGTH])
+void sendFeatureReport(hid_device* dev, unsigned char (&payload)[REPORT_LENGTH])
 {
 	int res = hid_send_feature_report(dev, payload, REPORT_LENGTH);
 	if (res == -1)
