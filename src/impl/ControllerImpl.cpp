@@ -7,6 +7,11 @@
 #include <iostream>
 #include <stdexcept>
 
+namespace ErrorMsg
+{
+constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
+}
+
 namespace
 {
 /* special bytes used for create payload */
@@ -14,19 +19,8 @@ constexpr unsigned char BRIGHTNESS_BYTE = static_cast<unsigned char>(0x09);
 constexpr unsigned char ACTION_BYTE = static_cast<unsigned char>(0x02);
 
 constexpr unsigned REPORT_LENGTH = 9;
-}
 
-namespace ErrorMsg
-{
-constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
-}
-
-ControllerImpl::ControllerImpl(std::shared_ptr<IModel> model)
-	: _model(std::move(model))
-{
-}
-
-static inline void sendFeatureReport(hid_device* dev, unsigned char (&payload)[REPORT_LENGTH])
+inline void sendFeatureReport(hid_device* dev, unsigned char (&payload)[REPORT_LENGTH])
 {
 	int res = hid_send_feature_report(dev, payload, REPORT_LENGTH);
 	if (res == -1)
@@ -35,6 +29,12 @@ static inline void sendFeatureReport(hid_device* dev, unsigned char (&payload)[R
 		(void)hid_exit();
 		throw std::runtime_error(ErrorMsg::ChipError);
 	}
+}
+}
+
+ControllerImpl::ControllerImpl(std::shared_ptr<IModel> model)
+	: _model(std::move(model))
+{
 }
 
 void ControllerImpl::setBrightness(int lvl)
@@ -50,7 +50,7 @@ void ControllerImpl::setBrightness(int lvl)
 		auto dev = _model->getChipHandler();
 		sendFeatureReport(dev, payload);
 	}
-	catch (std::runtime_error &error)
+	catch (std::runtime_error& error)
 	{
 		throw;
 	}

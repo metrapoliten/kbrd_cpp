@@ -16,6 +16,25 @@ namespace
 {
 constexpr char CHANGE_BRIGHTNESS = 'b';
 constexpr char QUIT = 'q';
+
+inline void printOptions()
+{
+	std::cout << "OPTIONS\n"
+				 "> b     change brightness\n";
+}
+
+inline void changeBrightness(const std::shared_ptr<IController>& c_ptr, int lvl)
+{
+	assert(0 <= lvl and lvl <= 100);
+	try
+	{
+		c_ptr->setBrightness(lvl);
+	}
+	catch (std::runtime_error& e)
+	{
+		std::cout << e.what();
+	}
+}
 }
 
 ViewImpl::ViewImpl(std::shared_ptr<IController> controller, std::shared_ptr<IModel> model)
@@ -31,25 +50,6 @@ void ViewImpl::showCurrentSettings()
 	std::cout << "CURRENT SETTINGS" << '\n'
 			  << "> Brightness: " << lvl << '%' << '\n'
 			  << "> RGB: " << RGB.R << ' ' << RGB.B << ' ' << RGB.G << '\n';
-}
-
-static inline void printOptions()
-{
-	std::cout << "OPTIONS\n"
-				 "> b     change brightness\n";
-}
-
-static inline void changeBrightness(const std::shared_ptr<IController>& c_ptr, int lvl)
-{
-	assert(0 <= lvl and lvl <= 100);
-	try
-	{
-		c_ptr->setBrightness(lvl);
-	}
-	catch (std::runtime_error& e)
-	{
-		std::cout << e.what();
-	}
 }
 
 void ViewImpl::runMenu()

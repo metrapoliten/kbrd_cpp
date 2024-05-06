@@ -9,6 +9,11 @@
 
 #include "impl/ModelImpl.h"
 
+namespace ErrorMsg
+{
+constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
+}
+
 namespace
 {
 constexpr unsigned short VENDOR_ID = 0x048d;
@@ -18,35 +23,27 @@ constexpr unsigned char GET_EFFECT_BYTE = static_cast<unsigned char>(0x88);
 constexpr unsigned char GET_MONOCOLOR_BYTE = static_cast<unsigned char>(148);
 
 constexpr unsigned REPORT_LENGTH = 9;
-}
 
-namespace ErrorMsg
-{
-constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
-}
-
-//todo: delete static functions and add to unnamed namespace
-static inline void logAndThrowRuntimeErr(hid_device* dev)
+inline void logAndThrowRuntimeErr(hid_device* dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
 	throw std::runtime_error(ErrorMsg::ChipError);
 }
 
-static inline void checkReportError(int res, hid_device* dev)
+inline void checkReportError(int res, hid_device* dev)
 {
 	if (res == -1)
 	{
 		logAndThrowRuntimeErr(dev);
 	}
 }
-
-static inline void init()
+inline void init()
 {
 	const int res = hid_init();
 	checkReportError(res, nullptr);
 }
 
-static inline void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
+inline void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 {
 	buf[0] = controlByte;
 	int res = hid_send_feature_report(dev, buf, REPORT_LENGTH);
@@ -58,7 +55,7 @@ static inline void getReport(hid_device* dev, unsigned char controlByte, unsigne
 }
 
 //todo: ask -> collect
-static inline int askBrightness(hid_device* dev)
+inline int askBrightness(hid_device* dev)
 {
 	assert(dev);
 
@@ -67,7 +64,7 @@ static inline int askBrightness(hid_device* dev)
 	return buf[5];
 }
 
-static inline void askRGB(hid_device* dev, Color &Color)
+inline void askRGB(hid_device* dev, Color &Color)
 {
 	assert(dev);
 
@@ -79,7 +76,7 @@ static inline void askRGB(hid_device* dev, Color &Color)
 	Color.G = hidBuf[6];
 }
 
-static hid_device* openDevice()
+hid_device* openDevice()
 {
 	auto dev = hid_open(VENDOR_ID, PRODUCT_ID, nullptr);
 	if (!dev)
@@ -87,6 +84,7 @@ static hid_device* openDevice()
 		logAndThrowRuntimeErr(nullptr);
 	}
 	return dev;
+}
 }
 
 ModelImpl::ModelImpl()
