@@ -2,7 +2,7 @@
 
 struct Color
 {
-	int R;
+	int R; //todo change to unsigned
 	int G;
 	int B;
 };

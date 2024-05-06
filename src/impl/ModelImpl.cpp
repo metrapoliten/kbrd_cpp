@@ -25,6 +25,7 @@ namespace ErrorMsg
 constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
 }
 
+//todo: delete static functions and add to unnamed namespace
 static inline void logAndThrowRuntimeErr(hid_device* dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
@@ -56,6 +57,7 @@ static inline void getReport(hid_device* dev, unsigned char controlByte, unsigne
 	checkReportError(res, dev);
 }
 
+//todo: ask -> collect
 static inline int askBrightness(hid_device* dev)
 {
 	assert(dev);
@@ -95,7 +97,7 @@ ModelImpl::ModelImpl()
 	try
 	{
 		init();
-		_brightness = askBrightness(_dev);
+		_brightness = askBrightness(_dev); //todo: make one function with init and add in init string
 		askRGB(_dev, ModelImpl::_rgb);
 	}
 	catch (std::runtime_error& e)
