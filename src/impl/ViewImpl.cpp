@@ -69,7 +69,6 @@ void ViewImpl::runMenu()
 			std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 			std::cout << "value [0, 100]: ";
 			std::cin >> lvl;
-			//			memset(&optionBuf, 0, sizeof(optionBuf));
 			if (lvl <= 100)
 			{
 				changeBrightness(_controller, lvl);
