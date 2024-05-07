@@ -1,6 +1,8 @@
 #pragma once
 
-#include "interfaces/IController.h"
+#include <cstdint>
+
+#include "interfaces/IController.h" //todo: clean includes
 #include "interfaces/IModel.h"
 
 /*! \brief

@@ -14,7 +14,9 @@ constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
 
 namespace
 {
-/* special bytes used for create payload */
+/* special bytes used for create payload
+ * use unsigned char because of C library, that uses this type
+ */
 constexpr unsigned char BRIGHTNESS_BYTE = static_cast<unsigned char>(0x09);
 constexpr unsigned char ACTION_BYTE = static_cast<unsigned char>(0x02);
 
@@ -37,11 +39,11 @@ ControllerImpl::ControllerImpl(std::shared_ptr<IModel> model)
 {
 }
 
-void ControllerImpl::setBrightness(int lvl)
+void ControllerImpl::setBrightness(std::uint16_t lvl)
 {
 	assert(0 <= lvl and lvl <= 100);
 
-	unsigned char payload[REPORT_LENGTH] {};
+	unsigned char payload[REPORT_LENGTH] {}; // use unsigned char because of C library, that uses this type
 	payload[0] = BRIGHTNESS_BYTE;
 	payload[1] = ACTION_BYTE;
 	payload[2] = static_cast<unsigned char>(lvl);

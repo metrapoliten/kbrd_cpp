@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <expected>
 #include <memory>
 #include <string_view>
@@ -22,7 +23,7 @@ public:
 	 * Sends data to chip to change _brightness of backlight
 	 * \param lvl Level of _brightness [0; 100]
 	 */
-	virtual void setBrightness(int lvl) = 0;
+	virtual void setBrightness(std::uint16_t lvl) = 0;
 
 	using Ptr = std::shared_ptr<IController>;
 };

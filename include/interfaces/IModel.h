@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <string_view>
 #include "Color.h"
@@ -34,7 +35,7 @@ public:
 	 * @return
 	 * Returns the level of _brightness in case of success or error description otherwise
 	 */
-	virtual int getBrightness() = 0;
+	virtual uint8_t getBrightness() = 0;
 
 	/*! \brief
 	 * Gets RGB values from chip

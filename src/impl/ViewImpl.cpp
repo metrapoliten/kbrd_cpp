@@ -23,7 +23,7 @@ void printOptions()
 				 "> b     change brightness\n";
 }
 
-void changeBrightness(const std::shared_ptr<IController>& c_ptr, int lvl)
+void changeBrightness(const std::shared_ptr<IController>& c_ptr, std::uint16_t lvl)
 {
 	assert(0 <= lvl and lvl <= 100);
 	try
@@ -45,11 +45,11 @@ ViewImpl::ViewImpl(std::shared_ptr<IController> controller, std::shared_ptr<IMod
 
 void ViewImpl::showCurrentSettings()
 {
-	int lvl = _model->getBrightness();
+	auto lvl = _model->getBrightness();
 	Color RGB = _model->getRGB();
 	std::cout << "CURRENT SETTINGS" << '\n'
-			  << "> Brightness: " << lvl << '%' << '\n'
-			  << "> RGB: " << RGB.R << ' ' << RGB.B << ' ' << RGB.G << '\n';
+			  << "> Brightness: " << +lvl << '%' << '\n'
+			  << "> RGB: " << +RGB.R << ' ' << +RGB.B << ' ' << +RGB.G << '\n';
 }
 
 void ViewImpl::runMenu()
@@ -65,11 +65,11 @@ void ViewImpl::runMenu()
 		switch (optionBuf[0])
 		{
 		case CHANGE_BRIGHTNESS:
-			int lvl;
+			std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 			std::cout << "value [0, 100]: ";
 			std::cin >> lvl;
 			//			memset(&optionBuf, 0, sizeof(optionBuf));
-			if (0 <= lvl and lvl <= 100)
+			if (lvl <= 100)
 			{
 				changeBrightness(_controller, lvl);
 				break;

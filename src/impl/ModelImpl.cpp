@@ -55,7 +55,7 @@ void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 }
 
 //todo: ask -> collect
-int askBrightness(hid_device* dev)
+std::uint8_t askBrightness(hid_device* dev)
 {
 	assert(dev);
 
@@ -109,7 +109,7 @@ hid_device* ModelImpl::getChipHandler()
 	return ModelImpl::_dev;
 }
 
-int ModelImpl::getBrightness()
+unsigned char ModelImpl::getBrightness()
 {
 	return ModelImpl::_brightness;
 }
