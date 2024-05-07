@@ -15,12 +15,14 @@
 namespace
 {
 constexpr char CHANGE_BRIGHTNESS = 'b';
+constexpr char SHOW_CURRENT_SETTINGS = 'c';
 constexpr char QUIT = 'q';
 
 void printOptions()
 {
 	std::cout << "OPTIONS\n"
 				 "> b     change brightness\n"
+				 "> c     show current settings\n"
 				 "> q     quit\n";
 }
 
@@ -75,6 +77,9 @@ void ViewImpl::runMenu()
 				break;
 			}
 			std::cout << "LEVEL OF BRIGHTNESS MUST BE FROM 0 TO 100 INCLUSIVELY\n";
+			break;
+		case SHOW_CURRENT_SETTINGS:
+			showCurrentSettings();
 			break;
 		case QUIT:
 			break;

@@ -116,7 +116,7 @@ hid_device* ModelImpl::getChipHandler()
 	return ModelImpl::_dev;
 }
 
-unsigned char ModelImpl::getBrightness()
+unsigned char ModelImpl::getBrightness() //todo: make new try-catch system
 {
 	ModelImpl::_brightness = collectBrightness(_dev);
 	return ModelImpl::_brightness;
@@ -130,7 +130,7 @@ ModelImpl::~ModelImpl()
 		std::wcerr << "hid_exit() returned error: the static data associated with HIDAPI weren't freed" << '\n'; // todo: make error/log file
 	}
 }
-Color ModelImpl::getRGB()
+Color ModelImpl::getRGB() //todo: make new try-catch system
 {
 	ModelImpl::_rgb = collectRGB(_dev);
 	return _rgb;
