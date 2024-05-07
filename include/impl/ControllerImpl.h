@@ -6,7 +6,7 @@
 class ControllerImpl : public IController
 {
 public:
-	explicit ControllerImpl(std::shared_ptr<IModel>);
+	explicit ControllerImpl(IModel::Ptr model);
 
 	void setBrightness(std::uint16_t lvl) override;
 private:

@@ -34,7 +34,7 @@ void sendFeatureReport(hid_device* dev, unsigned char (&payload)[REPORT_LENGTH])
 }
 }
 
-ControllerImpl::ControllerImpl(std::shared_ptr<IModel> model)
+ControllerImpl::ControllerImpl(IModel::Ptr model)
 	: _model(std::move(model))
 {
 }

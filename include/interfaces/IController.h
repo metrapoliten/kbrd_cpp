@@ -5,10 +5,7 @@
 #include <memory>
 #include <string_view>
 
-extern "C"
-{
 #include <hidapi.h>
-}
 
 /*! \brief
  *
