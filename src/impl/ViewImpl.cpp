@@ -20,7 +20,8 @@ constexpr char QUIT = 'q';
 void printOptions()
 {
 	std::cout << "OPTIONS\n"
-				 "> b     change brightness\n";
+				 "> b     change brightness\n"
+				 "> q     quit\n";
 }
 
 void changeBrightness(const std::shared_ptr<IController>& c_ptr, std::uint16_t lvl)

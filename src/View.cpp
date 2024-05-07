@@ -3,7 +3,6 @@
 
 #include "View.h"
 #include "impl/ViewImpl.h"
-#include "interfaces/IController.h"
 
 IView::Ptr createView(IController::Ptr c_ptr, IModel::Ptr m_ptr)
 {

@@ -1,10 +1,5 @@
 #pragma once
 
-#include <cstdint>
-
-#include "interfaces/IController.h" //todo: clean includes
-#include "interfaces/IModel.h"
-
 /*! \brief
  *
  * Interface for interacting with user
