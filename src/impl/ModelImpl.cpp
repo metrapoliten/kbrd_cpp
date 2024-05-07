@@ -62,16 +62,20 @@ std::uint8_t collectBrightness(hid_device* dev)
 	return buf[5];
 }
 
-void askRGB(hid_device* dev, Color &Color)
+Color collectRGB(hid_device* dev)
 {
 	assert(dev);
 
 	unsigned char hidBuf[REPORT_LENGTH];
 	getReport(dev, GET_MONOCOLOR_BYTE, hidBuf);
 
-	Color.R = hidBuf[4];
-	Color.B = hidBuf[5];
-	Color.G = hidBuf[6];
+	Color Color
+		{
+			hidBuf[4],	// .R
+			hidBuf[5],	// .G
+			hidBuf[6]	// .B
+		};
+	return Color;
 }
 
 hid_device* openDevice()
@@ -83,23 +87,30 @@ hid_device* openDevice()
 	}
 	return dev;
 }
-}
 
-ModelImpl::ModelImpl()
-	: _dev { openDevice() }
-	, _brightness {}
-	, _rgb {}
+std::uint8_t initAndCollectBrightness(hid_device *dev)
 {
 	try
 	{
 		init();
-		_brightness = collectBrightness(_dev); //todo: make one function with init and add in init string
-		askRGB(_dev, ModelImpl::_rgb);
+		return collectBrightness(dev);
 	}
 	catch (std::runtime_error& e)
 	{
 		throw;
 	}
+}
+
+}
+
+ModelImpl::ModelImpl()
+try : _dev { openDevice() }
+	, _brightness { initAndCollectBrightness(_dev) }
+	, _rgb { collectRGB(_dev) }
+{}
+catch (std::runtime_error& e)
+{
+		throw;
 }
 
 hid_device* ModelImpl::getChipHandler()
