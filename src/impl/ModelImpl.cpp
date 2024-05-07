@@ -69,12 +69,11 @@ Color collectRGB(hid_device* dev)
 	unsigned char hidBuf[REPORT_LENGTH];
 	getReport(dev, GET_MONOCOLOR_BYTE, hidBuf);
 
-	Color Color
-		{
-			hidBuf[4],	// .R
-			hidBuf[5],	// .G
-			hidBuf[6]	// .B
-		};
+	Color Color {
+		hidBuf[4], // .R
+		hidBuf[5], // .G
+		hidBuf[6] // .B
+	};
 	return Color;
 }
 
@@ -88,7 +87,7 @@ hid_device* openDevice()
 	return dev;
 }
 
-std::uint8_t initAndCollectBrightness(hid_device *dev)
+std::uint8_t initAndCollectBrightness(hid_device* dev)
 {
 	try
 	{
@@ -104,13 +103,12 @@ std::uint8_t initAndCollectBrightness(hid_device *dev)
 }
 
 ModelImpl::ModelImpl()
-try : _dev { openDevice() }
-	, _brightness { initAndCollectBrightness(_dev) }
-	, _rgb { collectRGB(_dev) }
-{}
+try : _dev{ openDevice() }, _brightness{ initAndCollectBrightness(_dev) }, _rgb{ collectRGB(_dev) }
+{
+}
 catch (std::runtime_error& e)
 {
-		throw;
+	throw;
 }
 
 hid_device* ModelImpl::getChipHandler()
