@@ -118,6 +118,7 @@ hid_device* ModelImpl::getChipHandler()
 
 unsigned char ModelImpl::getBrightness()
 {
+	ModelImpl::_brightness = collectBrightness(_dev);
 	return ModelImpl::_brightness;
 }
 
@@ -131,5 +132,6 @@ ModelImpl::~ModelImpl()
 }
 Color ModelImpl::getRGB()
 {
+	ModelImpl::_rgb = collectRGB(_dev);
 	return _rgb;
 }
