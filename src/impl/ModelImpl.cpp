@@ -54,8 +54,7 @@ void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 	checkReportError(res, dev);
 }
 
-//todo: ask -> collect
-std::uint8_t askBrightness(hid_device* dev)
+std::uint8_t collectBrightness(hid_device* dev)
 {
 	assert(dev);
 
@@ -95,7 +94,7 @@ ModelImpl::ModelImpl()
 	try
 	{
 		init();
-		_brightness = askBrightness(_dev); //todo: make one function with init and add in init string
+		_brightness = collectBrightness(_dev); //todo: make one function with init and add in init string
 		askRGB(_dev, ModelImpl::_rgb);
 	}
 	catch (std::runtime_error& e)
