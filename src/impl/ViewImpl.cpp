@@ -1,7 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
-#include <cassert>
 #include <charconv>
 #include <cstring>
 #include <iomanip>
@@ -30,17 +29,17 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void changeBrightness(const IController::Ptr& c_ptr, std::uint16_t lvl) //todo: should i use reference?
+void changeBrightness(const IController::Ptr& c_ptr) //todo: should i use reference?
 {
-	assert(0 <= lvl and lvl <= 100);
-	try
+	std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
+	std::cout << "value [0, 100]: ";
+	std::cin >> lvl; //todo: change to getline?
+	if (lvl <= 100)
 	{
 		c_ptr->setBrightness(lvl);
+		return;
 	}
-	catch (std::runtime_error& e) //todo: delete try-catch block
-	{
-		std::cout << e.what();
-	}
+	std::cout << "LEVEL OF BRIGHTNESS MUST BE FROM 0 TO 100 INCLUSIVELY\n";
 }
 
 std::variant<std::array<std::string, 3>, int> splitColor(const std::string& s)
@@ -154,15 +153,7 @@ void ViewImpl::runMenu()
 		switch (optionBuf[0])
 		{
 		case CHANGE_BRIGHTNESS:
-			std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
-			std::cout << "value [0, 100]: ";
-			std::cin >> lvl; //todo: change to getline?
-			if (lvl <= 100)
-			{
-				changeBrightness(_controller, lvl);
-				break;
-			}
-			std::cout << "LEVEL OF BRIGHTNESS MUST BE FROM 0 TO 100 INCLUSIVELY\n";
+			changeBrightness(_controller);
 			break;
 		case CHANGE_MONOCOLOR:
 			changeColor(_controller);
