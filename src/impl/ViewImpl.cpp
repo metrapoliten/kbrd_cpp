@@ -70,7 +70,7 @@ void ViewImpl::runMenu()
 		case CHANGE_BRIGHTNESS:
 			std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 			std::cout << "value [0, 100]: ";
-			std::cin >> lvl;
+			std::cin >> lvl; //todo: change to getline?
 			if (lvl <= 100)
 			{
 				changeBrightness(_controller, lvl);
