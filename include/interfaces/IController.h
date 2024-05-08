@@ -7,6 +7,8 @@
 
 #include <hidapi.h>
 
+#include "Color.h"
+
 /*! \brief
  *
  * Interface for interacting with the chip that
@@ -21,6 +23,8 @@ public:
 	 * \param lvl Level of _brightness [0; 100]
 	 */
 	virtual void setBrightness(std::uint16_t lvl) = 0;
+	//todo: add description
+	virtual void setColor(Color Color) = 0;
 
 	using Ptr = std::shared_ptr<IController>;
 };
