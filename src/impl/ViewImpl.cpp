@@ -26,7 +26,7 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void changeBrightness(const std::shared_ptr<IController>& c_ptr, std::uint16_t lvl)
+void changeBrightness(const IController::Ptr& c_ptr, std::uint16_t lvl) //todo: should i use reference?
 {
 	assert(0 <= lvl and lvl <= 100);
 	try
@@ -40,7 +40,7 @@ void changeBrightness(const std::shared_ptr<IController>& c_ptr, std::uint16_t l
 }
 }
 
-ViewImpl::ViewImpl(std::shared_ptr<IController> controller, std::shared_ptr<IModel> model)
+ViewImpl::ViewImpl(IController::Ptr controller, IModel::Ptr model)
 	: _controller(std::move(controller))
 	, _model(std::move(model))
 {

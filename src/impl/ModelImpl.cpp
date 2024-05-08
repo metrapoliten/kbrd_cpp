@@ -8,7 +8,7 @@
 
 #include "impl/ModelImpl.h"
 
-namespace ErrorMsg
+namespace ErrorMsg //todo: move to one file
 {
 constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
 }
@@ -31,15 +31,17 @@ void logAndThrowRuntimeErr(hid_device* dev)
 
 void checkReportError(int res, hid_device* dev)
 {
-	if (res == -1)
+	try
 	{
-		logAndThrowRuntimeErr(dev);
+		if (res == -1)
+		{
+			logAndThrowRuntimeErr(dev);
+		}
 	}
-}
-void init()
-{
-	const int res = hid_init();
-	checkReportError(res, nullptr);
+	catch (std::runtime_error &e)
+	{
+		std::cout << e.what();
+	}
 }
 
 void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
@@ -79,36 +81,31 @@ Color collectRGB(hid_device* dev)
 
 hid_device* openDevice()
 {
+	const int res = hid_init();
+	checkReportError(res, nullptr);
+
 	auto dev = hid_open(VENDOR_ID, PRODUCT_ID, nullptr);
 	if (!dev)
 	{
-		logAndThrowRuntimeErr(nullptr);
+		try
+		{
+			logAndThrowRuntimeErr(nullptr);
+		}
+		catch (std::runtime_error &e)
+		{
+			std::cout << e.what();
+		}
 	}
 	return dev;
-}
-
-std::uint8_t initAndCollectBrightness(hid_device* dev)
-{
-	try
-	{
-		init();
-		return collectBrightness(dev);
-	}
-	catch (std::runtime_error& e)
-	{
-		throw;
-	}
 }
 
 }
 
 ModelImpl::ModelImpl()
-try : _dev{ openDevice() }, _brightness{ initAndCollectBrightness(_dev) }, _rgb{ collectRGB(_dev) }
+	: _dev{ openDevice() }
+	, _brightness{ collectBrightness(_dev) }
+	, _rgb{ collectRGB(_dev) }
 {
-}
-catch (std::runtime_error& e)
-{
-	throw;
 }
 
 hid_device* ModelImpl::getChipHandler()

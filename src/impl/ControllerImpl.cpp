@@ -52,8 +52,8 @@ void ControllerImpl::setBrightness(std::uint16_t lvl)
 		auto dev = _model->getChipHandler();
 		sendFeatureReport(dev, payload);
 	}
-	catch (std::runtime_error& error)
+	catch (std::runtime_error& e)
 	{
-		throw;
+		std::cout << e.what();
 	}
 }
