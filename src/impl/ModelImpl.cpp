@@ -19,13 +19,13 @@ constexpr unsigned char kGetMonocolorByte = 0x94_uc;
 
 constexpr unsigned kReportLength = 9;
 
-void logAndThrowRuntimeErr(hid_device* dev)
+void logAndThrowRuntimeErr(hid_device* const dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
 	throw ChipException("Can't handle the chip (check log)");
 }
 
-void checkReportError(int res, hid_device* dev)
+void checkReportError(int const res, hid_device* const dev)
 {
 	if (res == -1)
 	{
@@ -33,7 +33,7 @@ void checkReportError(int res, hid_device* dev)
 	}
 }
 
-void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
+void getReport(hid_device* const dev, unsigned char const controlByte, unsigned char* buf)
 {
 	buf[0] = controlByte;
 	int res = hid_send_feature_report(dev, buf, kReportLength);
@@ -44,7 +44,7 @@ void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 	checkReportError(res, dev);
 }
 
-uint8_t collectBrightness(hid_device* dev)
+uint8_t collectBrightness(hid_device* const dev)
 {
 	assert(dev);
 
@@ -53,7 +53,7 @@ uint8_t collectBrightness(hid_device* dev)
 	return buf[5];
 }
 
-Color collectRGB(hid_device* dev)
+Color collectRGB(hid_device* const dev)
 {
 	assert(dev);
 
@@ -70,10 +70,10 @@ Color collectRGB(hid_device* dev)
 
 hid_device* openDevice()
 {
-	const int res = hid_init();
+	int const res = hid_init();
 	checkReportError(res, nullptr);
 
-	auto dev = hid_open(kVID, kPID, nullptr);
+	auto* const dev = hid_open(kVID, kPID, nullptr);
 	if (!dev)
 	{
 		logAndThrowRuntimeErr(nullptr);
@@ -90,12 +90,12 @@ ModelImpl::ModelImpl()
 {
 }
 
-hid_device* ModelImpl::getChipHandler()
+hid_device* ModelImpl::getChipHandler() const noexcept
 {
 	return ModelImpl::_dev;
 }
 
-unsigned char ModelImpl::getBrightness() //todo: make new try-catch system
+unsigned char ModelImpl::getBrightness()
 {
 	ModelImpl::_brightness = collectBrightness(_dev);
 	return ModelImpl::_brightness;
@@ -109,7 +109,7 @@ ModelImpl::~ModelImpl()
 		std::wcerr << "hid_exit() returned error: the static data associated with HIDAPI weren't freed" << '\n'; // todo: make error/log file
 	}
 }
-Color ModelImpl::getRGB() //todo: make new try-catch system
+Color ModelImpl::getRGB()
 {
 	ModelImpl::_rgb = collectRGB(_dev);
 	return _rgb;

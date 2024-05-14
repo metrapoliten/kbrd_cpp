@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <iostream>
-#include <stdexcept>
+#include <utility>
 
 #include "ChipException.h"
 #include "impl/ControllerImpl.h"
@@ -20,9 +20,9 @@ constexpr unsigned char kColorByte = 0x14_uc;
 
 constexpr unsigned kReportLength = 9;
 
-void sendFeatureReport(hid_device* dev, unsigned char (&payload)[kReportLength])
+void sendFeatureReport(hid_device* const dev, unsigned char const (&payload)[kReportLength])
 {
-	int res = hid_send_feature_report(dev, payload, kReportLength);
+	int const res = hid_send_feature_report(dev, payload, kReportLength);
 	if (res == -1)
 	{
 		std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
@@ -37,7 +37,7 @@ ControllerImpl::ControllerImpl(IModel::Ptr model)
 {
 }
 
-void ControllerImpl::setBrightness(uint16_t lvl)
+void ControllerImpl::setBrightness(uint16_t const lvl) const
 {
 	assert(0 <= lvl and lvl <= 100);
 
@@ -45,18 +45,11 @@ void ControllerImpl::setBrightness(uint16_t lvl)
 	payload[0] = kBrightnessByte;
 	payload[1] = kActionByte;
 	payload[2] = static_cast<unsigned char>(lvl);
-//	try
-//	{
-		auto dev = _model->getChipHandler();
-		sendFeatureReport(dev, payload);
-//	}
-//	catch (std::runtime_error& e)
-//	{
-//		std::cout << e.what();
-//	}
+	auto* const dev = _model->getChipHandler();
+	sendFeatureReport(dev, payload);
 }
 
-void ControllerImpl::setColor(Color Color)
+void ControllerImpl::setColor(Color const Color) const
 {
 	assert(0 <= Color.R and Color.R <= 255);
 	assert(0 <= Color.B and Color.B <= 255);
@@ -68,13 +61,7 @@ void ControllerImpl::setColor(Color Color)
 	payload[3] = static_cast<unsigned char>(Color.R);
 	payload[4] = static_cast<unsigned char>(Color.G);
 	payload[5] = static_cast<unsigned char>(Color.B);
-//	try
-//	{
-		auto dev = _model->getChipHandler();
-		sendFeatureReport(dev, payload);
-//	}
-//	catch (std::runtime_error& e)
-//	{
-//		std::cout << e.what();
-//	}
+
+	auto* const dev = _model->getChipHandler();
+	sendFeatureReport(dev, payload);
 }

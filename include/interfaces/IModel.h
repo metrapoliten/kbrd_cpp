@@ -26,7 +26,7 @@ public:
 	 * @return
 	 * Returns the device handler in case of success or error description otherwise
 	 */
-	virtual hid_device* getChipHandler() = 0;
+	[[nodiscard]] virtual hid_device* getChipHandler() const = 0;
 
 	/*! \brief
 	 * Gets the level of _brightness

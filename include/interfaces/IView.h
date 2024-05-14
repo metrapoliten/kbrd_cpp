@@ -12,12 +12,12 @@ public:
 	/*! \brief
 	 * Shows chip's settings (for now prints in console)
 	 */
-	virtual void showCurrentSettings() = 0;
+	virtual void showCurrentSettings() const = 0;
 
 	/*! \brief
 	 * Runs a user interface that helps the user interact with the backlight
 	 */
-	virtual void runMenu() = 0;
+	virtual void runMenu() const = 0;
 
 //todo: delete comment
 

@@ -11,9 +11,8 @@ class ViewImpl : public IView
 public:
 	ViewImpl(IController::Ptr controller, IModel::Ptr model);
 
-	void showCurrentSettings() override;
-	void runMenu() override;
-//	void changeBrightness(int lvl) override;
+	void showCurrentSettings() const override;
+	void runMenu() const override;
 
 private:
 	IController::Ptr _controller;

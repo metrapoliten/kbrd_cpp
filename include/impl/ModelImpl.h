@@ -14,7 +14,7 @@ public:
 	ModelImpl(const ModelImpl&) = delete;
 	ModelImpl& operator=(const ModelImpl&) = delete;
 
-	hid_device* getChipHandler() override;
+	[[nodiscard]] hid_device* getChipHandler() const noexcept override;
 	unsigned char getBrightness() override;
 	Color getRGB() override;
 

@@ -28,7 +28,7 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void changeBrightness(const IController::Ptr& ontroller)
+void changeBrightness(const IController::Ptr& _controller)
 {
 	uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 	std::cout << "value [0, 100]: ";
@@ -46,7 +46,7 @@ void changeBrightness(const IController::Ptr& ontroller)
 	}
 	if (lvl <= 100)
 	{
-		controller->setBrightness(lvl);
+		_controller->setBrightness(lvl);
 		return;
 	}
 	std::cout << "LEVEL OF BRIGHTNESS MUST BE FROM 0 TO 100 INCLUSIVELY\n";
@@ -59,7 +59,7 @@ enum class ColorErrorCode
 	NotThreeTokens
 };
 
-std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(const std::string& s)
+std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(std::string const& s)
 {
 	std::stringstream ss(s);
 	std::string token;
@@ -80,12 +80,12 @@ std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(const std::s
 	return colors;
 }
 
-std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::string, 3> tokens)
+std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::string, 3> const& tokens)
 {
 	uint8_t value;
 	std::array<uint8_t, 3> colors{};
 	uint8_t colorCount = 0;
-	for (auto &i : tokens)
+	for (auto const &i : tokens)
 	{
 		auto [ptr, ec] = std::from_chars(i.data(), i.data() + i.size(), value);
 		if (ec == std::errc())
@@ -146,16 +146,16 @@ ViewImpl::ViewImpl(IController::Ptr controller, IModel::Ptr model)
 {
 }
 
-void ViewImpl::showCurrentSettings()
+void ViewImpl::showCurrentSettings() const
 {
-	auto lvl = _model->getBrightness();
-	Color RGB = _model->getRGB();
+	auto const lvl = _model->getBrightness();
+	Color const RGB = _model->getRGB();
 	std::cout << "CURRENT SETTINGS" << '\n'
 			  << "> Brightness: " << +lvl << '%' << '\n'
 			  << "> RGB: " << +RGB.R << ' ' << +RGB.B << ' ' << +RGB.G << '\n';
 }
 
-void ViewImpl::runMenu()
+void ViewImpl::runMenu() const
 {
 	printOptions();
 	char optionBuf[4] = { 0 }; //todo: write why size = 4
