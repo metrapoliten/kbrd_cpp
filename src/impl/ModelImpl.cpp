@@ -21,7 +21,7 @@ constexpr unsigned kReportLength = 9;
 
 void logAndThrowRuntimeErr(hid_device* const dev)
 {
-	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
+	std::wclog << hid_error(dev) << '\n';
 	throw ChipException("Can't handle the chip (check log)");
 }
 
@@ -106,7 +106,7 @@ ModelImpl::~ModelImpl()
 	hid_close(_dev);
 	if (hid_exit() == -1)
 	{
-		std::wcerr << "hid_exit() returned error: the static data associated with HIDAPI weren't freed" << '\n'; // todo: make error/log file
+		std::wclog << "hid_exit() returned error: the static data associated with HIDAPI weren't freed" << '\n';
 	}
 }
 Color ModelImpl::getRGB()

@@ -25,7 +25,7 @@ void sendFeatureReport(hid_device* const dev, unsigned char const (&payload)[kRe
 	int const res = hid_send_feature_report(dev, payload, kReportLength);
 	if (res == -1)
 	{
-		std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
+		std::wclog << hid_error(dev) << '\n';
 		throw ChipException("Can't handle the chip (check log)");
 	}
 }
