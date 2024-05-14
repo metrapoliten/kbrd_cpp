@@ -20,11 +20,11 @@ int main()
 	}
 	catch (ChipException const& e)
 	{
-		std::cerr << "Error: " << e.what() << '\n';
+		std::cerr << "Chip Error: " << e.what() << '\n';
 	}
 	catch (std::runtime_error const& e)
 	{
-		std::cerr << "Error: " << e.what() << '\n';
+		std::cerr << "IO Error: " << e.what() << '\n';
 	}
 
 	return 0;
