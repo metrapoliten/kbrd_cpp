@@ -28,6 +28,16 @@ void printOptions()
 				 "> q     quit\n";
 }
 
+void cinClear()
+{
+	if (std::cin.eof())
+	{
+		std::terminate();
+	}
+	std::cin.clear();
+	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void changeBrightness(const IController::Ptr& _controller)
 {
 	uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
@@ -35,12 +45,7 @@ void changeBrightness(const IController::Ptr& _controller)
 	std::cin >> lvl;
 	if (!std::cin)
 	{
-		if (std::cin.eof())
-		{
-			std::terminate();
-		}
-		std::cin.clear();
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		cinClear();
 		std::cout << "INVALID ARGUMENT\n";
 		return;
 	}
@@ -158,19 +163,14 @@ void ViewImpl::showCurrentSettings() const
 void ViewImpl::runMenu() const
 {
 	printOptions();
-	char optionBuf[4] = { 0 }; //todo: write why size = 4
+	std::string optionBuf(1, '0'); //todo: write why size = 4
 	while (optionBuf[0] != kQuit)
 	{
 		std::cout << "Enter command: ";
 		std::cin >> optionBuf;
 		if (!std::cin)
 		{
-			if (std::cin.eof())
-			{
-				std::terminate();
-			}
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cinClear();
 			continue;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
