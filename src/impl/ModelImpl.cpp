@@ -84,9 +84,9 @@ hid_device* openDevice()
 }
 
 ModelImpl::ModelImpl()
-	: _dev{ openDevice() }
-	, _brightness{ collectBrightness(_dev) }
-	, _rgb{ collectRGB(_dev) }
+	: _dev { openDevice() }
+	, _brightness { collectBrightness(_dev) }
+	, _rgb { collectRGB(_dev) }
 {
 }
 

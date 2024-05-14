@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "interfaces/IView.h"
 #include "interfaces/IController.h"
 #include "interfaces/IModel.h"
+#include "interfaces/IView.h"
 
 class ViewImpl : public IView
 {

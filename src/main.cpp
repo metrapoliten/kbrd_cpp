@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#include "Controller.h"
 #include "ChipException.h"
+#include "Controller.h"
 #include "Model.h"
 #include "View.h"
 

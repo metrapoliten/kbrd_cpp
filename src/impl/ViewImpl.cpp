@@ -70,7 +70,7 @@ std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(std::string 
 	std::string token;
 	std::array<std::string, 3> colors;
 	uint32_t tokensCount = 0;
-	while(std::getline(ss, token, '.'))
+	while (std::getline(ss, token, '.'))
 	{
 		if (tokensCount == 3)
 		{
@@ -88,9 +88,9 @@ std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(std::string 
 std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::string, 3> const& tokens)
 {
 	uint8_t value;
-	std::array<uint8_t, 3> colors{};
+	std::array<uint8_t, 3> colors {};
 	uint8_t colorCount = 0;
-	for (auto const &i : tokens)
+	for (auto const& i : tokens)
 	{
 		auto [ptr, ec] = std::from_chars(i.data(), i.data() + i.size(), value);
 		if (ec == std::errc())
@@ -106,7 +106,7 @@ std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::stri
 			return ColorErrorCode::OutOfRange;
 		}
 	}
-	Color Color{
+	Color Color {
 		colors[0],
 		colors[1],
 		colors[2]
@@ -128,11 +128,11 @@ void changeColor(IController::Ptr const& c_ptr)
 		{
 			c_ptr->setColor(std::get<Color>(res2));
 		}
-		else if(std::get<ColorErrorCode>(res2) == ColorErrorCode::InvalidArgument)
+		else if (std::get<ColorErrorCode>(res2) == ColorErrorCode::InvalidArgument)
 		{
 			std::cout << "INVALID ARGUMENT\n";
 		}
-		else if(std::get<ColorErrorCode>(res2) == ColorErrorCode::OutOfRange)
+		else if (std::get<ColorErrorCode>(res2) == ColorErrorCode::OutOfRange)
 		{
 			std::cout << "PRIMARY COLOR VALUE MUST BE FROM 0 TO 255 INCLUSIVELY\n";
 		}
