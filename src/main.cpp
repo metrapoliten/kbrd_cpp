@@ -12,13 +12,13 @@ int main()
 {
 	try
 	{
-		auto model = createModel();
-		auto controller = createController(model);
-		auto view = createView(controller, model);
+		auto const model = createModel();
+		auto const controller = createController(model);
+		auto const view = createView(controller, model);
 		view->showCurrentSettings();
 		view->runMenu();
 	}
-	catch (ChipException& e)
+	catch (ChipException const& e)
 	{
 		std::cerr << "Error" << e.what();
 	}
