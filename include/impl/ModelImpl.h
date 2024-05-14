@@ -19,7 +19,7 @@ public:
 	Color getRGB() override;
 
 private:
-	hid_device* _dev; // todo: change to ref?
+	hid_device* _dev;
 	uint8_t _brightness;
 	Color _rgb;
 };
