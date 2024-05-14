@@ -28,11 +28,22 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void changeBrightness(const IController::Ptr & controller) //todo: should i use reference?
+void changeBrightness(const IController::Ptr& ontroller)
 {
 	uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 	std::cout << "value [0, 100]: ";
-	std::cin >> lvl; //todo: change to getline?
+	std::cin >> lvl;
+	if (!std::cin)
+	{
+		if (std::cin.eof())
+		{
+			std::terminate();
+		}
+		std::cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		std::cout << "INVALID ARGUMENT\n";
+		return;
+	}
 	if (lvl <= 100)
 	{
 		controller->setBrightness(lvl);
@@ -98,7 +109,7 @@ std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::stri
 	return Color;
 }
 
-void changeColor(const IController::Ptr& c_ptr) //todo: should i use reference?
+void changeColor(const IController::Ptr& c_ptr)
 {
 	std::string input;
 	std::cout << "[R.G.B]: ";
@@ -152,7 +163,16 @@ void ViewImpl::runMenu()
 	{
 		std::cout << "Enter command: ";
 		std::cin >> optionBuf;
-		std::cin.clear();
+		if (!std::cin)
+		{
+			if (std::cin.eof())
+			{
+				std::terminate();
+			}
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			continue;
+		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		switch (optionBuf[0])
 		{
