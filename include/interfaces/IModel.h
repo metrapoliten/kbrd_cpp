@@ -9,11 +9,9 @@
 
 #include "Color.h"
 
-// todo: update descriptions of methods
 /*! \brief
- *
  * Interface for initialising the work with chip
- * and getting settings form the chip
+ * and getting settings from the chip
  */
 class IModel
 {
@@ -21,26 +19,23 @@ public:
 	virtual ~IModel() = default;
 
 	/*! \brief
-	 * Gets the device handler required for setting the settings by the IController
-	 * The device must be inited firstly
+	 * Gets the chip handler from HIDAPI required to change the settings by the Controller
 	 * @return
-	 * Returns the device handler in case of success or error description otherwise
+	 * Returns the device handler in case, can't be nullptr
 	 */
 	[[nodiscard]] virtual hid_device* getChipHandler() const = 0;
 
 	/*! \brief
-	 * Gets the level of _brightness
-	 * The device must be inited firstly
+	 * Requests from chip the level of brightness
 	 * @return
-	 * Returns the level of _brightness in case of success or error description otherwise
+	 * Returns the level of brightness [0; 100]
 	 */
 	virtual uint8_t getBrightness() = 0;
 
 	/*! \brief
-	 * Gets RGB values from chip
-	 * The device must be inited firstly
+	 * Requests RGB values from the chip
 	 * @return
-	 * Returns the unordered_map with RGB, char for color name ('R', 'G', 'B') and int for color value
+	 * Returns the struct with .R, .G, .B fields
 	 */
 	virtual Color getRGB() = 0;
 
