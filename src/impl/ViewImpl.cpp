@@ -38,7 +38,7 @@ void cinClear()
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void changeBrightness(const IController::Ptr& _controller)
+void changeBrightness(IController::Ptr const& _controller)
 {
 	uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 	std::cout << "value [0, 100]: ";
@@ -114,7 +114,7 @@ std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::stri
 	return Color;
 }
 
-void changeColor(const IController::Ptr& c_ptr)
+void changeColor(IController::Ptr const& c_ptr)
 {
 	std::string input;
 	std::cout << "[R.G.B]: ";
