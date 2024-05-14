@@ -163,7 +163,7 @@ void ViewImpl::showCurrentSettings() const
 void ViewImpl::runMenu() const
 {
 	printOptions();
-	std::string optionBuf(1, '0'); //todo: write why size = 4
+	std::string optionBuf(1, '0');
 	while (optionBuf[0] != kQuit)
 	{
 		std::cout << "Enter command: ";
