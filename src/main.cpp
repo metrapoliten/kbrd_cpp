@@ -22,6 +22,10 @@ int main()
 	{
 		std::cerr << "Error" << e.what();
 	}
+	catch (std::runtime_error const& e)
+	{
+		std::cerr << "Error: " << e.what() << '\n';
+	}
 
 	return 0;
 }

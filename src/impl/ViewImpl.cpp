@@ -32,7 +32,7 @@ void clearCin()
 {
 	if (std::cin.eof())
 	{
-		std::terminate();
+		throw std::runtime_error("unexpected end of program due to EOF (Ctrl + D)");
 	}
 	std::cin.clear();
 	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
