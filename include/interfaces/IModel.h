@@ -4,12 +4,11 @@
 #include <cstdint>
 #include <memory>
 #include <string_view>
+
+#include <hidapi.h>
+
 #include "Color.h"
 
-extern "C"
-{
-#include <hidapi.h>
-}
 // todo: update descriptions of methods
 /*! \brief
  *

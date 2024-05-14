@@ -1,19 +1,27 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
+#include <iostream>
+
 #include "Controller.h"
+#include "ChipException.h"
 #include "Model.h"
 #include "View.h"
 
-#include <stdexcept>
-
 int main()
 {
-	auto model = createModel();
-	auto controller = createController(model);
-	auto view = createView(controller, model);
-	view->showCurrentSettings();
-	view->runMenu();
+	try
+	{
+		auto model = createModel();
+		auto controller = createController(model);
+		auto view = createView(controller, model);
+		view->showCurrentSettings();
+		view->runMenu();
+	}
+	catch (ChipException& e)
+	{
+		std::cout << "Error" << e.what();
+	}
 
 	return 0;
 }

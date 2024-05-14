@@ -2,7 +2,6 @@
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
 #include <charconv>
-#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <limits>
@@ -15,10 +14,10 @@
 
 namespace
 {
-constexpr char CHANGE_BRIGHTNESS = 'b';
-constexpr char CHANGE_MONOCOLOR = 'm';
-constexpr char SHOW_CURRENT_SETTINGS = 'c';
-constexpr char QUIT = 'q';
+constexpr char kChangeBrightness = 'b';
+constexpr char kChangeMonocolor = 'm';
+constexpr char kShowCurrentSettings = 'c';
+constexpr char kQuit = 'q';
 
 void printOptions()
 {
@@ -29,46 +28,51 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void changeBrightness(const IController::Ptr& c_ptr) //todo: should i use reference?
+void changeBrightness(const IController::Ptr & controller) //todo: should i use reference?
 {
-	std::uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
+	uint16_t lvl; // lvl is not uint8_t, because it reads as character, not number
 	std::cout << "value [0, 100]: ";
 	std::cin >> lvl; //todo: change to getline?
 	if (lvl <= 100)
 	{
-		c_ptr->setBrightness(lvl);
+		controller->setBrightness(lvl);
 		return;
 	}
 	std::cout << "LEVEL OF BRIGHTNESS MUST BE FROM 0 TO 100 INCLUSIVELY\n";
 }
 
-std::variant<std::array<std::string, 3>, int> splitColor(const std::string& s)
+enum class ColorErrorCode
+{
+	InvalidArgument,
+	OutOfRange,
+	NotThreeTokens
+};
+
+std::variant<std::array<std::string, 3>, ColorErrorCode> splitColor(const std::string& s)
 {
 	std::stringstream ss(s);
 	std::string token;
 	std::array<std::string, 3> colors;
-	std::uint32_t tokensCount = 0;
+	uint32_t tokensCount = 0;
 	while(std::getline(ss, token, '.'))
 	{
 		if (tokensCount == 3)
 		{
-			return 1;
+			return ColorErrorCode::NotThreeTokens;
 		}
 		colors[tokensCount++] = token;
 	}
 	if (tokensCount != 3)
 	{
-		return 1;
+		return ColorErrorCode::NotThreeTokens;
 	}
 	return colors;
 }
 
-constexpr int COLOR_INVALID_ARGUMENT = 1;
-constexpr int COLOR_OUT_OF_RANGE = 2;
-std::variant<Color, int> colorsStringArrToStruct(std::array<std::string, 3> tokens)
+std::variant<Color, ColorErrorCode> colorsStringArrToStruct(std::array<std::string, 3> tokens)
 {
-	std::uint8_t value;
-	std::array<std::uint8_t, 3> colors{};
+	uint8_t value;
+	std::array<uint8_t, 3> colors{};
 	uint8_t colorCount = 0;
 	for (auto &i : tokens)
 	{
@@ -79,11 +83,11 @@ std::variant<Color, int> colorsStringArrToStruct(std::array<std::string, 3> toke
 		}
 		else if (ec == std::errc::invalid_argument)
 		{
-			return COLOR_INVALID_ARGUMENT;
+			return ColorErrorCode::InvalidArgument;
 		}
 		else if (ec == std::errc::result_out_of_range)
 		{
-			return COLOR_OUT_OF_RANGE;
+			return ColorErrorCode::OutOfRange;
 		}
 	}
 	Color Color{
@@ -108,11 +112,11 @@ void changeColor(const IController::Ptr& c_ptr) //todo: should i use reference?
 		{
 			c_ptr->setColor(std::get<Color>(res2));
 		}
-		else if(std::get<int>(res2) == COLOR_INVALID_ARGUMENT)
+		else if(std::get<ColorErrorCode>(res2) == ColorErrorCode::InvalidArgument)
 		{
 			std::cout << "INVALID ARGUMENT\n";
 		}
-		else if(std::get<int>(res2) == COLOR_OUT_OF_RANGE)
+		else if(std::get<ColorErrorCode>(res2) == ColorErrorCode::OutOfRange)
 		{
 			std::cout << "PRIMARY COLOR VALUE MUST BE FROM 0 TO 255 INCLUSIVELY\n";
 		}
@@ -143,8 +147,8 @@ void ViewImpl::showCurrentSettings()
 void ViewImpl::runMenu()
 {
 	printOptions();
-	char optionBuf[4] = { 0 };
-	while (optionBuf[0] != QUIT)
+	char optionBuf[4] = { 0 }; //todo: write why size = 4
+	while (optionBuf[0] != kQuit)
 	{
 		std::cout << "Enter command: ";
 		std::cin >> optionBuf;
@@ -152,20 +156,19 @@ void ViewImpl::runMenu()
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		switch (optionBuf[0])
 		{
-		case CHANGE_BRIGHTNESS:
+		case kChangeBrightness:
 			changeBrightness(_controller);
 			break;
-		case CHANGE_MONOCOLOR:
+		case kChangeMonocolor:
 			changeColor(_controller);
 			break;
-		case SHOW_CURRENT_SETTINGS:
+		case kShowCurrentSettings:
 			showCurrentSettings();
 			break;
-		case QUIT:
+		case kQuit:
 			break;
 		default:
 			std::cout << "WRONG OPTION\n";
-			memset(&optionBuf, 0, sizeof(optionBuf));
 			break;
 		}
 	}

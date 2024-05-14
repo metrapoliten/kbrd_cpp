@@ -4,63 +4,52 @@
 #include <cassert>
 #include <cstring>
 #include <iostream>
-#include <stdexcept>
 
+#include "ChipException.h"
 #include "impl/ModelImpl.h"
-
-namespace ErrorMsg //todo: move to one file
-{
-constexpr const char* ChipError = "ErrorMsg: something is wrong with the chip";
-}
+#include "operator_uc.h"
 
 namespace
 {
-constexpr unsigned short VENDOR_ID = 0x048d;
-constexpr unsigned short PRODUCT_ID = 0x6006;
+constexpr unsigned short kVID = 0x048d;
+constexpr unsigned short kPID = 0x6006;
 
-constexpr unsigned char GET_EFFECT_BYTE = static_cast<unsigned char>(0x88);
-constexpr unsigned char GET_MONOCOLOR_BYTE = static_cast<unsigned char>(148);
+constexpr unsigned char kGetEffectByte = 0x88_uc;
+constexpr unsigned char kGetMonocolorByte = 0x94_uc;
 
-constexpr unsigned REPORT_LENGTH = 9;
+constexpr unsigned kReportLength = 9;
 
 void logAndThrowRuntimeErr(hid_device* dev)
 {
 	std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
-	throw std::runtime_error(ErrorMsg::ChipError);
+	throw ChipException("Can't handle the chip (check log)");
 }
 
 void checkReportError(int res, hid_device* dev)
 {
-	try
+	if (res == -1)
 	{
-		if (res == -1)
-		{
-			logAndThrowRuntimeErr(dev);
-		}
-	}
-	catch (std::runtime_error &e)
-	{
-		std::cout << e.what();
+		logAndThrowRuntimeErr(dev);
 	}
 }
 
 void getReport(hid_device* dev, unsigned char controlByte, unsigned char* buf)
 {
 	buf[0] = controlByte;
-	int res = hid_send_feature_report(dev, buf, REPORT_LENGTH);
+	int res = hid_send_feature_report(dev, buf, kReportLength);
 	checkReportError(res, dev);
-	std::memset(buf, 0, REPORT_LENGTH);
+	std::memset(buf, 0, kReportLength);
 	buf[0] = 0;
-	res = hid_get_feature_report(dev, buf, REPORT_LENGTH);
+	res = hid_get_feature_report(dev, buf, kReportLength);
 	checkReportError(res, dev);
 }
 
-std::uint8_t collectBrightness(hid_device* dev)
+uint8_t collectBrightness(hid_device* dev)
 {
 	assert(dev);
 
-	unsigned char buf[REPORT_LENGTH];
-	getReport(dev, GET_EFFECT_BYTE, buf);
+	unsigned char buf[kReportLength];
+	getReport(dev, kGetEffectByte, buf);
 	return buf[5];
 }
 
@@ -68,8 +57,8 @@ Color collectRGB(hid_device* dev)
 {
 	assert(dev);
 
-	unsigned char hidBuf[REPORT_LENGTH];
-	getReport(dev, GET_MONOCOLOR_BYTE, hidBuf);
+	unsigned char hidBuf[kReportLength];
+	getReport(dev, kGetMonocolorByte, hidBuf);
 
 	Color Color {
 		hidBuf[4], // .R
@@ -84,17 +73,10 @@ hid_device* openDevice()
 	const int res = hid_init();
 	checkReportError(res, nullptr);
 
-	auto dev = hid_open(VENDOR_ID, PRODUCT_ID, nullptr);
+	auto dev = hid_open(kVID, kPID, nullptr);
 	if (!dev)
 	{
-		try
-		{
-			logAndThrowRuntimeErr(nullptr);
-		}
-		catch (std::runtime_error &e)
-		{
-			std::cout << e.what();
-		}
+		logAndThrowRuntimeErr(nullptr);
 	}
 	return dev;
 }
