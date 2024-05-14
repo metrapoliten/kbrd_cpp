@@ -20,7 +20,7 @@ int main()
 	}
 	catch (ChipException& e)
 	{
-		std::cout << "Error" << e.what();
+		std::cerr << "Error" << e.what();
 	}
 
 	return 0;
