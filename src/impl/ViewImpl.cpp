@@ -28,7 +28,7 @@ void printOptions()
 				 "> q     quit\n";
 }
 
-void cinClear()
+void clearCin()
 {
 	if (std::cin.eof())
 	{
@@ -45,7 +45,7 @@ void changeBrightness(IController::Ptr const& _controller)
 	std::cin >> lvl;
 	if (!std::cin)
 	{
-		cinClear();
+		clearCin();
 		std::cout << "INVALID ARGUMENT\n";
 		return;
 	}
@@ -170,7 +170,7 @@ void ViewImpl::runMenu() const
 		std::cin >> optionBuf;
 		if (!std::cin)
 		{
-			cinClear();
+			clearCin();
 			continue;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
