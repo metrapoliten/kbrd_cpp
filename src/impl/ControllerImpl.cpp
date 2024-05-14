@@ -26,7 +26,6 @@ void sendFeatureReport(hid_device* const dev, unsigned char const (&payload)[kRe
 	if (res == -1)
 	{
 		std::wcerr << hid_error(dev) << '\n'; // todo: make error/log file
-		(void)hid_exit(); //todo: should I delete the call because it calls in destructor of ModelImpl?
 		throw ChipException("Can't handle the chip (check log)");
 	}
 }

@@ -19,8 +19,6 @@ public:
 	 */
 	virtual void runMenu() const = 0;
 
-//todo: delete comment
-
 //	/*! \brief
 //	 * Changes level of _brightness
 //	 * @param lvl Level of _brightness. Must be set in [0; 100]
