@@ -1,4 +1,67 @@
-== backlight
+== kbdr_cpp
 
-== known bugs
+A Linux userspace utility for changing the color and brightness of keyboards based on the *ITE8291* chip.
+
+=== Features
+
+* Set static colors
+* Adjust brightness
+* Interactive CLI menu
+* No kernel module required — communicates via USB HID
+
+=== Prerequisites
+
+* https://github.com/libusb/hidapi[`hidapi`] development library
+* CMake (≥ 3.27)
+* {cpp}17 compiler (tested on gcc)
+
+=== Building
+* Clone the repository:
+[,shell]
+----
+git clone https://github.com/metrapoliten/kbrd_cpp.git
+cd kbrd_cpp
+----
+
+* If your keyboard's USB vendor and product IDs differ from defaults (`048d`,`6006`), edit constants `VENDOR_ID` and `PRODUCT_ID` in `src/impl/ModelImpl.cpp`.
+
+* Configure and build with CMake:
+[,shell]
+----
+cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+cmake --build build-debug -j$(nproc)
+----
+
+* The executable `backlight` will be placed in the `build/` directory.
+
+=== Usage
+. Run `backlight` from the build directory.
+. You will be presented with an interactive menu. Follow the on-screen prompts to change the color and brightness of your keyboard backlight. Example session:
+[,shell]
+----
+~$ ./build/backlight
+CURRENT SETTINGS
+> Brightness: 0%
+> RGB: 255 0 255
+OPTIONS
+> b     change brightness
+> m     change monocolor
+> c     show current settings
+> q     quit
+Enter command: m
+[R.G.B]: 255.255.255
+Enter command: b
+value [0, 100]: 50
+Enter command: c
+CURRENT SETTINGS
+> Brightness: 50%
+> RGB: 255 255 255
+Enter command: q
+~$
+----
+
+=== Known issues
 image::img.png[]
+
+=== License
+Distributed under the BSD 3-Clause License. See `LICENSE` for more information.
