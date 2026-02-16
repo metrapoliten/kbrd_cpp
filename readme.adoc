@@ -1,4 +1,19 @@
-== backlight
+A Linux userspace utility for changing the color and brightness of keyboards based on the ITE8291 chip.
 
-== known bugs
+=== deps
+
+https://github.com/libusb/hidapi/tree/533dd9229a846d6ab00c4dced1cbddf66b576258[`hidapi`]
+
+=== build
+If your device's `idVendor` and `idProduct` are not equal to `048d` and `6006`, respectively, change the constants `VENDOR_ID` and `PRODUCT_ID` in `src/impl/ModelImpl.cpp`. To build, use cmake from the source code directory. For example:
+[,shell]
+----
+cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B build-debug
+cmake --build build-debug -j
+----
+
+=== use
+Run `backlight` in your build directory and follow cli menu instructions.
+
+=== known bugs
 image::img.png[]
