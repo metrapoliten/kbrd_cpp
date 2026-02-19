@@ -14,5 +14,8 @@ target_include_directories(backlight PUBLIC "${CMAKE_SOURCE_DIR}/include")
 target_compile_options(backlight PRIVATE
         -Wall -Wextra -pedantic-errors -Wsign-conversion -Wconversion -Werror -Weffc++ -Winline)
 
-find_package(hidapi REQUIRED)
+set(HIDAPI_WITH_LIBUSB FALSE)
+set(BUILD_SHARED_LIBS FALSE)
+add_subdirectory(hidapi)
+
 target_link_libraries(backlight PRIVATE hidapi::hidapi)
