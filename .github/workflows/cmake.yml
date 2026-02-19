@@ -15,12 +15,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
+      with:
+        submodules: true
+        fetch-depth: '0'
+        
     - name: Install deps
-      run: sudo apt-get update && sudo apt-get install -y libhidapi-dev
-      
-    - name: Configure CMake
-      run: cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      run: |
+        sudo apt update
+        sudo apt install libudev-dev
 
-    - name: Build
-      run: cmake --build ${{github.workspace}}/build -j
+    - name: Configure and build
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+        cmake --build ${{github.workspace}}/build -j
