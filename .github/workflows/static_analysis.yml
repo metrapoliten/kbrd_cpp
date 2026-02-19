@@ -1,0 +1,28 @@
+name: Static analysis
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: "0"
+
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          style: "LLVM"
+          tidy-checks: "-*"
+
+      - name: Fail fast?!
+        if: steps.linter.outputs.clang-format-checks-failed > 0
+        run: exit 1
