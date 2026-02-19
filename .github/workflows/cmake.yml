@@ -1,30 +1,40 @@
-name: ReleaseBuild
+name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
-
-env:
-  BUILD_TYPE: Release
+    branches: ["main"]
 
 jobs:
   build:
+    name: Debug build with coverage
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: true
-        fetch-depth: '0'
-        
-    - name: Install deps
-      run: |
-        sudo apt update
-        sudo apt install libudev-dev
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+          fetch-depth: "0"
 
-    - name: Configure and build
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
-        cmake --build ${{github.workspace}}/build -j
+      - name: Install deps
+        run: |
+          sudo apt update
+          sudo apt install libudev-dev
+
+      - name: Configure and build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S . -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+          cmake --build ${{github.workspace}}/build -j
+
+      - name: Test
+        run: ctest --test-dir build -j
+
+      - name: Check test coverage
+        uses: threeal/gcovr-action@v1.2.0
+        with:
+          fail-under-line: 70
+          fail-under-branch: 70
+          fail-under-function: 70
+          decisions: true
+          fail-under-decision: 70
