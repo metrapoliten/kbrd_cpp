@@ -30,8 +30,8 @@ jobs:
 
       - name: Configure and build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type}} -G Ninja -S . -B ${{github.workspace}}/build
-          cmake --build ${{github.workspace}}/build -j
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -G Ninja -S . -B ${{ github.workspace }}/build
+          cmake --build ${{ github.workspace }}/build -j
 
       - name: Test
         run: ctest --test-dir build -j
