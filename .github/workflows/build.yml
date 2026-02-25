@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: ${{ matrix.build_type }} build
+    name: ${{ matrix.build_type }}
     runs-on: ubuntu-latest
 
     strategy:
