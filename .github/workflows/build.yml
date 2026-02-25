@@ -8,8 +8,14 @@ on:
 
 jobs:
   build:
-    name: Coverage
+    name: ${{ matrix.build_type }} build
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - build_type: Coverage
+          - build_type: Release
 
     steps:
       - uses: actions/checkout@v5
@@ -24,13 +30,14 @@ jobs:
 
       - name: Configure and build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Coverage -G Ninja -S . -B ${{github.workspace}}/build
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type}} -G Ninja -S . -B ${{github.workspace}}/build
           cmake --build ${{github.workspace}}/build -j
 
       - name: Test
         run: ctest --test-dir build -j
 
       - name: Check test coverage
+        if: ${{ matrix.build_type == 'Coverage' }}
         uses: threeal/gcovr-action@v1.2.0
         with:
           fail-under-line: 70
