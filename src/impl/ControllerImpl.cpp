@@ -1,6 +1,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++, C#, and Java: https://pvs-studio.com
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <utility>
@@ -19,6 +20,15 @@ constexpr unsigned char kBrightnessByte = 0x09_uc;
 constexpr unsigned char kColorByte = 0x14_uc;
 
 constexpr unsigned kReportLength = 9;
+
+void buildReport(unsigned char* out_buf, std::initializer_list<unsigned char> data) {
+	std::fill_n(out_buf, kReportLength, 0x00);
+#ifdef _WIN32
+	std::ranges::copy(data, out_buf + 1);
+#else
+	std::ranges::copy(data, out_buf);
+#endif
+}
 
 void sendFeatureReport(hid_device* const dev, unsigned char const (&payload)[kReportLength])
 {
@@ -41,9 +51,7 @@ void ControllerImpl::setBrightness(uint16_t const lvl) const
 	assert(0 <= lvl and lvl <= 100);
 
 	unsigned char payload[kReportLength] {}; // use unsigned char because of C library, that uses this type
-	payload[0] = kBrightnessByte;
-	payload[1] = kActionByte;
-	payload[2] = static_cast<unsigned char>(lvl);
+	buildReport(payload, { kBrightnessByte, kActionByte, static_cast<unsigned char>(lvl) });
 	auto* const dev = _model->getChipHandler();
 	sendFeatureReport(dev, payload);
 }
@@ -54,12 +62,15 @@ void ControllerImpl::setColor(Color const Color) const
 	assert(0 <= Color.B and Color.B <= 255);
 	assert(0 <= Color.G and Color.G <= 255);
 	unsigned char payload[kReportLength] {}; // use unsigned char because of C library, that uses this type
-	payload[0] = kColorByte;
-	payload[1] = 0x01_uc;
-	payload[2] = 0x01_uc;
-	payload[3] = static_cast<unsigned char>(Color.R);
-	payload[4] = static_cast<unsigned char>(Color.G);
-	payload[5] = static_cast<unsigned char>(Color.B);
+
+	buildReport(payload, {
+	    kColorByte,
+	    0x01_uc,           // control
+	    0x01_uc,           // row
+	    static_cast<unsigned char>(Color.R),
+	    static_cast<unsigned char>(Color.G),
+	    static_cast<unsigned char>(Color.B)
+	});
 
 	auto* const dev = _model->getChipHandler();
 	sendFeatureReport(dev, payload);
