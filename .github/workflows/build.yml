@@ -44,9 +44,9 @@ jobs:
         if: ${{ matrix.build_type == 'Coverage' }}
         uses: threeal/gcovr-action@v1.2.0
         with:
-          fail-under-line: 70
-          fail-under-branch: 70
-          fail-under-function: 70
           decisions: true
+          fail-under-branch: 70
           fail-under-decision: 70
+          fail-under-function: 70
+          fail-under-line: 70
           print-summary: true
