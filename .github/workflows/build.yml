@@ -49,3 +49,4 @@ jobs:
           fail-under-function: 70
           decisions: true
           fail-under-decision: 70
+          print-summary: true
