@@ -49,4 +49,8 @@ jobs:
           fail-under-decision: 70
           fail-under-function: 70
           fail-under-line: 70
+          excludes: |
+            build/.*
+            hidapi/.*
+            test/.*
           print-summary: true
