@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.27)
 project(backlight CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 file(GLOB_RECURSE sources
         "${CMAKE_SOURCE_DIR}/src/*.cpp"
