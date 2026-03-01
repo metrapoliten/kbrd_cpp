@@ -23,7 +23,7 @@ git clone https://github.com/metrapoliten/kbrd_cpp.git
 cd kbrd_cpp
 ----
 
-* If your keyboard's USB vendor and product IDs differ from defaults (`048d`,`6006`), edit constants `VENDOR_ID` and `PRODUCT_ID` in `src/impl/ModelImpl.cpp`.
+* If your keyboard's USB vendor and product IDs differ from defaults (`048d`,`6006`), edit constants `kVID` and `kPID` in `src/impl/ModelImpl.cpp`.
 
 * Configure and build with CMake:
 [,shell]
