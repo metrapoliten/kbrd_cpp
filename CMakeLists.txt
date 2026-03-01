@@ -41,7 +41,7 @@ enable_testing()
 
 add_executable(backlight.test)
 target_sources(backlight.test
-    PRIVATE test/FakeHidapi.cpp test/ControllerImplTest.cpp ${SRCS}
+    PRIVATE test/FakeHidapi.cpp test/test.cpp ${SRCS}
     PRIVATE
         FILE_SET HEADERS
         BASE_DIRS
