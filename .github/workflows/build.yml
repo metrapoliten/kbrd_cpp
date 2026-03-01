@@ -1,0 +1,56 @@
+name: Build + test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build_and_test:
+    name: ${{ matrix.os }} - ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        build_type: [Release]
+        include:
+          - os: ubuntu-latest
+            build_type: Coverage
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          submodules: true
+          fetch-depth: "0"
+
+      - name: Install deps
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt update
+          sudo apt install libudev-dev
+
+      - name: Configure and build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -G Ninja -S . -B ${{ github.workspace }}/build
+          cmake --build ${{ github.workspace }}/build -j
+
+      - name: Test
+        run: ctest --test-dir build -j
+
+      - name: Check test coverage
+        if: ${{ matrix.build_type == 'Coverage' }}
+        uses: threeal/gcovr-action@v1.2.0
+        with:
+          decisions: true
+          fail-under-branch: 70
+          fail-under-decision: 70
+          fail-under-function: 70
+          fail-under-line: 70
+          excludes: |
+            build/.*
+            hidapi/.*
+            test/.*
+          print-summary: true

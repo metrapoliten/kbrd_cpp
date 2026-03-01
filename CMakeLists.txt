@@ -3,6 +3,9 @@ project(backlight CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
+set(CMAKE_C_FLAGS_COVERAGE --coverage)
+set(CMAKE_CXX_FLAGS_COVERAGE --coverage)
+
 set(SRCS
     src/impl/ControllerImpl.cpp
     src/impl/ModelImpl.cpp
