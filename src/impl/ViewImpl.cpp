@@ -157,7 +157,7 @@ void ViewImpl::showCurrentSettings() const
 	Color const RGB = _model->getRGB();
 	std::cout << "CURRENT SETTINGS" << '\n'
 			  << "> Brightness: " << +lvl << '%' << '\n'
-			  << "> RGB: " << +RGB.R << ' ' << +RGB.B << ' ' << +RGB.G << '\n';
+			  << "> RGB: " << +RGB.R << ' ' << +RGB.G << ' ' << +RGB.B << '\n';
 }
 
 void ViewImpl::runMenu() const
