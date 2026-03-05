@@ -28,7 +28,7 @@ cd kbrd_cpp
 [,shell]
 ----
 cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
-cmake --build build-debug -j
+cmake --build build -j
 ----
 
 * The executable `backlight` will be placed in the `build/` directory.
