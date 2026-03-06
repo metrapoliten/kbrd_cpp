@@ -5,21 +5,20 @@
  * Interface to show user their interaction abilities
  * to see and change backlight settings
  */
-class IView
-{
+class IView {
 public:
-	virtual ~IView() = default;
+  virtual ~IView() = default;
 
-	/*! \brief
-	 * Prints in console current settings
-	 * (level of brightness and RGB)
-	 */
-	virtual void showCurrentSettings() const = 0;
+  /*! \brief
+   * Prints in console current settings
+   * (level of brightness and RGB)
+   */
+  virtual void showCurrentSettings() const = 0;
 
-	/*! \brief
-	 * Runs user interface that helps user interact with backlight
-	 */
-	virtual void runMenu() const = 0;
+  /*! \brief
+   * Runs user interface that helps user interact with backlight
+   */
+  virtual void runMenu() const = 0;
 
-	using Ptr = std::unique_ptr<IView>;
+  using Ptr = std::unique_ptr<IView>;
 };

@@ -80,13 +80,13 @@ TEST_F(ControllerImplTest, setBrightnessSendsCorrectData) {
   EXPECT_CALL(mock, hid_send_feature_report(dummy_dev, _, 9))
       .WillOnce([brightness](hid_device *, const unsigned char *data, size_t) {
 #ifdef _WIN32
-      EXPECT_EQ(data[1], 0x09); // kBrightnessByte
-      EXPECT_EQ(data[2], 0x02); // kActionByte
-      EXPECT_EQ(data[3], brightness);
+        EXPECT_EQ(data[1], 0x09); // kBrightnessByte
+        EXPECT_EQ(data[2], 0x02); // kActionByte
+        EXPECT_EQ(data[3], brightness);
 #else
-      EXPECT_EQ(data[0], 0x09); // kBrightnessByte
-      EXPECT_EQ(data[1], 0x02); // kActionByte
-      EXPECT_EQ(data[2], brightness);
+        EXPECT_EQ(data[0], 0x09); // kBrightnessByte
+        EXPECT_EQ(data[1], 0x02); // kActionByte
+        EXPECT_EQ(data[2], brightness);
 #endif
         return 9;
       });
