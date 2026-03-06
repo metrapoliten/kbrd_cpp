@@ -12,7 +12,7 @@ set(SRCS
     src/View.cpp
 )
 
-add_executable(backlight src/main.cpp)
+add_executable(backlight)
 target_sources(backlight
     PRIVATE src/main.cpp ${SRCS}
     PRIVATE
