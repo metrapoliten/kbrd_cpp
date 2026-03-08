@@ -1,3 +1,7 @@
+image:https://github.com/metrapoliten/kbrd_cpp/actions/workflows/build.yml/badge.svg[, link="https://github.com/metrapoliten/kbrd_cpp/actions/workflows/build.yml"]
+image:https://github.com/metrapoliten/kbrd_cpp/actions/workflows/static_analysis.yml/badge.svg[, link="https://github.com/metrapoliten/kbrd_cpp/actions/workflows/static_analysis.yml"]
+image:https://codecov.io/gh/metrapoliten/kbrd_cpp/graph/badge.svg?token=TTHSDHOY2A[, link="https://codecov.io/gh/metrapoliten/kbrd_cpp"]
+
 == kbdr_cpp
 
 A userspace utility for changing the color and brightness of keyboards based on the *ITE8291* chip for Windows and Linux.
