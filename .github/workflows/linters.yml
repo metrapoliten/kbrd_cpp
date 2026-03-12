@@ -19,6 +19,6 @@ jobs:
           style: "file"
           tidy-checks: "-*"
 
-      - name: Fail fast?!
+      - name: Verify formatting compliance
         if: steps.linter.outputs.clang-format-checks-failed > 0
         run: exit 1
