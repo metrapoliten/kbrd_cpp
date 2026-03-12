@@ -1,0 +1,24 @@
+name: Linters
+
+on:
+  push:
+    branches: [ '**' ]
+
+jobs:
+  clang-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: "0"
+
+      - uses: cpp-linter/cpp-linter-action@v2
+        id: linter
+        with:
+          style: "file"
+          tidy-checks: "-*"
+
+      - name: Verify formatting compliance
+        if: steps.linter.outputs.clang-format-checks-failed > 0
+        run: exit 1
